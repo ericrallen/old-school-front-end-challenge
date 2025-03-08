@@ -1,0 +1,12 @@
+{
+  "name": "old-school-front-end_bun",
+  "module": "bun/index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
