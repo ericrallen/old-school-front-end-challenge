@@ -133,7 +133,7 @@ I created a new version of the file with `console.time()` and `console.timeEnd()
 
 It looked generally like this, which wasn't super helpful:
 
-```sh
+```log
 [0.00ms] split
 [0.00ms] push
 [0.01ms] combine names
@@ -145,7 +145,7 @@ It looked generally like this, which wasn't super helpful:
 [0.02ms] court
 ```
 
-**Note**: I wrapped calls to built-in functions like `String.prototype.split()`, `Array.prototype.push()`, and `Array.prototype.sort()` just in case there were any outliers where we'd need to do something clever - the likelihood of them being the bottlenock instead of my code was very, very low
+**Note**: I wrapped calls to the built-in prototype functions like `String.prototype.split()`, `Array.prototype.push()`, and `Array.prototype.sort()` just in case there were any outliers where we'd need to do something clever. In general, the likelihood of one of them being the bottlenock instead of our own code is low, but there are situations where you might need to adapt something to optimize your specific use case. Also, the engine will sometimes optimize things under the hood in ways that you don't anticipate, so we don't want to assume someting will or won't be performant without measuring it.
 
 ##### Step two
 
@@ -153,7 +153,7 @@ Let's try a different approach using `performance.mark()` and `performance.measu
 
 I added a script that wraps our function in `performance.mark()` calls, calls the function a bunch of times, and then returns the average response time:
 
-```sh
+```log
 -[PERFORMANCE]-------------------
 
     Mean: 0.05035ms
@@ -171,9 +171,9 @@ I added a script that wraps our function in `performance.mark()` calls, calls th
 
 That's okay, but those are rookie numbers. We need to increase that participant count to really see what's going on.
 
-With a minimum of `1000` participants, we can see things are not looking as good:
+With a minimum of `1000` participants, we can see things are taking a bit longer:
 
-```sh
+```log
 -[PERFORMANCE]-------------------
 
     Mean: 0.42935ms
@@ -189,9 +189,9 @@ With a minimum of `1000` participants, we can see things are not looking as good
 ---------------------------------
 ```
 
-Let's dig deeper. What about a minimum of `100000`?
+Let's dig deeper. What about if we use a list of people waiting that's somewhere between `100,000` and `500,000`?
 
-```sh
+```log
 -[PERFORMANCE]-------------------
 
     Mean: 36.96402ms
@@ -207,14 +207,225 @@ Let's dig deeper. What about a minimum of `100000`?
 ---------------------------------
 ```
 
-That's not looking so great. And now we've validated our assumption that this can definitely be better.
+Okay, so our time to execute is growing quite a bit with the number of names we're dealing with in the queue.
 
 I think we have enough information to move on to the `Make it right` part of our iterative cycle.
 
-#### Make it right
+### Make it right
 
-_Coming Soon..._
+Now that we know there's some code that could be faster, let's try to see if we can get some useful info from the `console.time()` and `console.timeEnd()` methods we tried to use earlier. By combining our performance monitoring scripts, we can get the output for each stage of the process:
 
-#### Make it fast(er)
+```log
+[6.99ms] split
+[0.16ms] push
+[7.18ms] combine names
+[39.57ms] sort
+[1.00ms] index of
+[0.30ms] waitTime - loop
+[0.30ms] waitTime
+[0.38ms] getWaitTime
+[48.15ms] court
+[65.64ms] runtime
+
+-[PERFORMANCE]-------------------
+
+    Mean: 48.32021ms
+    Median: 48.32021ms
+    Mode: 48.32021ms
+
+-[Configuration]-----------------
+
+    1 iterations
+    Average participants: 291631
+    Average judges: 6
+
+---------------------------------
+```
+
+Interestingly, it looks like the `sort` is taking the most time - we're sorting between `100,000` and `500,000` items per iteration, so that makes sense - but there are some other spots we can try to optimize, too. Let's save the sorting for `Make it fast.`.
+
+Remember, we're still in the `Make it Right.` stage.
+
+#### Step one
+
+The first thing I want to do is fix the way we're calculating the wait time. In the previuos code, we were iterating with a `for()` loop and then using a `while()` loop inside of that to segment our list of names with appointments into groups and increment the wait time per group.
+
+While writing some tests to validate my calcuations, I ended up finding a more efficient way to solve for the wait time:
+
+```math
+\text{WaitTime}(p, j) = (\lfloor \frac{p}{j} \rfloor + 1) \cdot A
+```
+
+**Where**:
+
+- `p` is the 0-indexed position of the user in the queue
+- `j` is the number of judges available for appointments
+- `A` is the duration of an appointment
+
+In our codebase, it looks like this:
+
+```ts
+// Note: we check for judges < 1 before we call `getWaitTime`,
+// so we can safely default to `1` here
+function getWaitTime(nameIndex = 0, judges = 1) {
+  // We'll check to see if the user will be in the first group
+  // before we do any math
+  return nameIndex < judges
+    ? APPOINTMENT_LENGTH
+    : (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
+}
+```
+
+Now, let's update our implementation and run both of the `getWaitTime()` implementations to compare how they are impacting our results:
+
+```log
+[7.03ms] split
+[0.13ms] push
+[7.19ms] combine names
+[43.05ms] sort
+[1.18ms] index of
+[0.25ms] waitTime - loop
+[0.26ms] waitTime
+[0.34ms] getWaitTime
+[0.01ms] NEW waitTime
+[0.03ms] NEW getWaitTime
+[51.82ms] court
+[70.20ms] runtime
+
+-[PERFORMANCE]-------------------
+
+    Mean: 51.98950ms
+    Median: 51.98950ms
+    Mode: 51.98950ms
+
+-[Configuration]-----------------
+
+    1 iterations
+    Average participants: 330182
+    Average judges: 2
+
+---------------------------------
+```
+
+It looks like our new wait time calculation is a bit better, too. So let's swich over to that one and remove the old logic from our benchmarking:
+
+```logs
+[6.19ms] split
+[0.16ms] push
+[6.38ms] combine names
+[36.57ms] sort
+[2.02ms] index of
+[0.01ms] NEW waitTime
+[0.07ms] NEW getWaitTime
+[45.04ms] court
+[60.78ms] runtime
+
+-[PERFORMANCE]-------------------
+
+    Mean: 45.18375ms
+    Median: 45.18375ms
+    Mode: 45.18375ms
+
+-[Configuration]-----------------
+
+    1 iterations
+    Average participants: 274298
+    Average judges: 5
+
+---------------------------------
+```
+
+**Note**: I'll leave the `NEW` label in there so it's easy to tell which things we've tweaked as we keep going.
+
+#### Step two
+
+Now, let's look at some other things we could do to the `court()` function to `Make it right.`.
+
+One thing I noticed after looking at the code more thoroughly is that we're providing an early escape hatch for the edge cases, to keep the Cyclomatic Complexity of our function low, but I wonder if we should optimize for the most likely conditions rather than edge cases?
+
+```ts
+function newCourt(name = "", judges = 0, waitingList = ""): number {
+  if (judges > 0) {
+    if (waitingList.length > 0) {
+      const waitingNames = [name, ...waitingList.split(" ")];
+
+      waitingNames.push(name);
+
+      const waitingNamesNew = [name, ...waitingList.split(" ")];
+
+      const sortedNames = waitingNames.sort();
+
+      const nameIndex = sortedNames.indexOf(name);
+
+      const waitTime = getWaitTime(nameIndex, judges);
+
+      return waitTime;
+    }
+    return APPOINTMENT_LENGTH;
+  }
+
+  return Infinity;
+}
+```
+
+This represents a new execution path for our code, so we'll need to update our benchmark script to run both implementations and let us compare them:
+
+```logs
+Gathering performance data...
+
+Running old implementation...
+
+-[PERFORMANCE]-------------------
+
+    Mean: 68.10211ms
+    Median: 67.43637ms
+    Mode: 63.01508ms
+
+-[Configuration]-----------------
+
+    1000 iterations
+    Average participants: 500000
+    Average judges: 6
+
+---------------------------------
+
+Running new implementation...
+
+-[PERFORMANCE]-------------------
+
+    Mean: 68.96045ms
+    Median: 68.26633ms
+    Mode: 66.13996ms
+
+-[Configuration]-----------------
+
+    1000 iterations
+    Average participants: 500000
+    Average judges: 6
+
+---------------------------------
+
+-[SUMMARY]-----------------------
+
+    Old implementation: 68.10211ms
+    New implementation: 68.96045ms
+
+    Old implementation is faster
+    by -0.85834ms on average
+
+---------------------------------
+```
+
+I ran this quite a few times with `500,000` participants, 6 judges, and `1,000` iterations, and it was pretty close every time, but it looks like our previous early escape hatch approach might be just a little faster?
+
+For illustrative purposes, we'll revisit this idea later when we test Node, Deno, and the browser. Things like this can be runtime-dependent, we may need to optimize for a known environment where we expect the code to execute or focus on more general performance across disparate runtime environments.
+
+So let's revert that change for now.
+
+Everything else is about as good as it could be for this simple of a function.
+
+### Make it fast(er)
+
+Let's dig into the reason you all came here, the `Make it fast.` part of our process.
 
 _Coming Soon..._
