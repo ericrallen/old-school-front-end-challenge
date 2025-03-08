@@ -1,0 +1,458 @@
+/*
+  NOTE: In order to avoid a bunch of boilerplate reset code at the top of this file,
+  this stylesheet relies on the underlying HTML page importing the `ress` CSS reset
+  
+  Stylesheet: https://unpkg.com/ress/dist/ress.min.css
+  Docs: https://ress.page/docs
+*/
+
+:root {
+  font-size: 14px;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  /* we're going to use this to style some non-link stuff in a link-like way */
+  --color-link: #0000ee;
+}
+
+body {
+  min-height: 100%;
+  min-width: 100%;
+
+  font-size: 1rem;
+
+  color: #232323;
+  background-color: #f7f7f7;
+
+  /* force a vertical scrollbar to avoid any layout shifts when toggling content */
+  overflow-y: scroll;
+  /* hide horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    overflow-x: scroll;
+  }
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+/* borrowed from: https://piccalil.li/blog/a-more-modern-css-reset/ */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+/* A elements that don't have a class get default styles */
+/* borrowed from: https://piccalil.li/blog/a-more-modern-css-reset/ */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: currentColor;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 600;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol,
+ul {
+  padding-left: 1rem;
+}
+
+ol:not(.util--bullets),
+ul:not(.util--bullets) {
+  list-style-type: none;
+  padding-left: initial;
+}
+
+#recipe-book {
+  position: relative;
+  min-height: 100%;
+  min-width: 100%;
+  padding: 1rem;
+}
+
+#recipe-book > h1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1rem 1rem 0.5rem;
+  background-color: #f7f7f7;
+  width: 100%;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+
+  z-index: 1;
+}
+
+#recipe-book > section {
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+}
+
+#recipes {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.recipe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1;
+}
+
+@media (min-width: 768px) {
+  .recipe-list {
+    flex-direction: row;
+    flex: auto;
+    scroll-padding: 0;
+    scroll-snap-stop: always;
+  }
+
+  /*
+    HACK: this makes sure that the horizontal scrolling container has equal
+    padding at the epnd without this pseudo-element, the container's padding collapses.
+  */
+  .recipe-list::after {
+    content: "";
+    display: block;
+    padding-right: 0.1rem;
+  }
+}
+
+.recipe-list__item {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: fit-content;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  /* Improve transition for height changes */
+  transition: all 0.3s ease;
+  /* We need a separate max-height transition with a longer duration for smoother animation */
+  transition-property: all, max-height;
+  transition-duration: 0.3s, 0.6s;
+  transition-timing-function: ease, cubic-bezier(0, 1, 0, 1);
+}
+
+@media (min-width: 768px) {
+  .recipe-list__item {
+    min-width: 50%;
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .recipe-list__item {
+    min-width: 33%;
+  }
+}
+
+.recipe {
+  margin-bottom: 2.25rem;
+}
+
+.recipe__header {
+  margin-bottom: 1rem;
+}
+
+.recipe__header__title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.recipe__header__prep-time,
+.recipe__header__serves {
+  font-size: 0.875rem;
+  margin-bottom: 0.1rem;
+}
+
+.recipe__notes {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border: 1px solid #e4e4e4;
+  margin: 0.5rem 0;
+}
+
+.recipe__form {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.recipe__form__header {
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+}
+
+.recipe__description {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.recipe__description :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.recipe__items {
+  margin-bottom: 1rem;
+}
+
+.recipe__items-list__item {
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.recipe__items-list__item:has(input:checked) > label {
+  text-decoration: line-through;
+}
+
+.recipe code {
+  /* Add a highlight effect to the important bits of each item that we can designate with `<code>` tags. */
+  /* Adapted from: https://stackoverflow.com/a/62484130/14144258 */
+  --highlight: 236, 203, 52;
+  background: linear-gradient(
+      104deg,
+      rgba(var(--highlight), 0) 0.9%,
+      rgba(var(--highlight), 7) 2.4%,
+      rgba(var(--highlight), 0.5) 5.8%,
+      rgba(var(--highlight), 0.1) 93%,
+      rgba(var(--highlight), 0.4) 96%,
+      rgba(var(--highlight), 0) 98%
+    ),
+    linear-gradient(
+      183deg,
+      rgba(var(--highlight), 0) 0%,
+      rgba(var(--highlight), 0.3) 7.9%,
+      rgba(var(--highlight), 0) 15%
+    );
+  text-shadow: -7px 0px 9.8px rgba(var(--highlight), 1),
+    21px -18.1px 7.3px rgba(255, 255, 255, 1),
+    -18.1px -27.3px 30px rgba(255, 255, 255, 1);
+  padding: 0.1rem;
+  border-radius: 0.5rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.recipe__items-list__note__trigger {
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.65rem;
+  color: var(--color-link);
+  border: 1px solid var(--color-link);
+  border-radius: 50%;
+  margin-left: 0;
+  vertical-align: middle;
+
+  appearance: none;
+}
+
+[popover] {
+  font-size: 0.875rem;
+  padding: 1rem;
+  border: 1px solid #e4e4e4;
+
+  background-color: #f7f7f7;
+
+  z-index: 1;
+}
+
+/*
+  HACK: unfortunately anchor positioning isn't well-supported yet,
+  so native popover position isn't great and we have to rely on the
+  fixed position of the popover and just center it and then we'll use
+  the ::backdrop pseudo-element to make it stand out from the rest of the UI.
+*/
+:popover-open {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+[popover]::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 768px) {
+  :popover-open {
+    width: 70%;
+  }
+}
+
+.recipe__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem 1rem;
+  background-color: #f7f7f7;
+}
+
+.recipe__footer::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 1.5rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(247, 247, 247, 0) 0%,
+    rgba(247, 247, 247, 0.25) 60%,
+    rgba(247, 247, 247, 0.75) 85%,
+    rgba(247, 247, 247, 1) 100%
+  );
+}
+
+.recipe__footer__reset {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  appearance: none;
+}
+
+/*
+  HACK: This is a hack to show the reset button when any checkbox in the form is checked.
+
+  The Show More/Less button is outside of the form to prevent it from triggering the reset button's visibility.
+*/
+.recipe__form:has(input[type="checkbox"]:checked)
+  ~ .recipe__footer
+  .recipe__footer__reset {
+  display: initial;
+}
+
+.recipe__footer__toggle {
+  display: none;
+}
+
+.recipe__footer__toggle + label {
+  display: block;
+}
+
+.recipe__footer__toggle__label__span {
+  display: inline-block;
+  content: "";
+  width: 100%;
+  cursor: pointer;
+}
+
+.recipe__footer__toggle:not(:checked) + label span::before {
+  content: "Show Less";
+}
+
+.recipe__footer__toggle:checked + label span::before {
+  content: "Show More";
+}
+
+/* Height toggling behavior */
+.recipe-list__item:has(.recipe__footer__toggle:checked) {
+  max-height: 40vh;
+  transition-timing-function: ease, ease-out;
+}
+
+.recipe-list__item:has(.recipe__footer__toggle:not(:checked)) {
+  /* Use a very large max-height instead of 'none' to allow for animation */
+  max-height: 2000px; /* Large enough to fit any recipe */
+  transition-timing-function: ease, ease-in;
+}
+
+/* Add a subtle indicator that there's more content */
+.recipe-list__item:has(.recipe__footer__toggle:checked)::after {
+  content: "";
+  position: absolute;
+  bottom: 2.5rem; /* Position above the footer */
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(247, 247, 247, 0.5) 70%,
+    rgba(247, 247, 247, 0.9) 100%
+  );
+  pointer-events: none;
+  /* Always show the gradient in collapsed state for simplicity and cross-browser compatibility */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/*
+  HACK: This is a hack to hide the Show More/Less toggle when the
+  parent element doesn't have enough content to overflow and need
+  the show/hide functionality.
+  
+  Blink supports scroll-driven animations that we can use to set the
+  `--has-overflow` variable. Webkit and Gecko* don't yet.
+
+  * There is a Firefox experimental flag you can enable to support this.
+
+  Ideally as browser support catches up, the experience will just improve
+  slighty for Firefox and Safari users.
+*/
+@supports (animation-timeline: scroll()) {
+  /* Create keyframes for overflow detection */
+  @keyframes detect-overflow {
+    from,
+    to {
+      --has-overflow: ;
+    }
+  }
+
+  .recipe-list__item {
+    animation: detect-overflow linear forwards;
+    animation-timeline: scroll(self);
+  }
+
+  .recipe__footer__toggle__label__span {
+    --visibility-if-has-overflow: var(--has-overflow) inline-block;
+    --visibility-if-no-overflow: none;
+    display: var(
+      --visibility-if-has-overflow,
+      var(--visibility-if-no-overflow)
+    );
+  }
+
+  .recipe-list__item:has(.recipe__footer__toggle:not(:checked))
+    .recipe__footer__toggle__label__span {
+    display: inline-block;
+  }
+
+  .recipe-list__item:has(.recipe__items) .recipe__footer__toggle__label__span {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cooking w/ Veggies | Recipe Book</title>
+    <meta
+      name="description"
+      content="A simple recipe book with some vegetarian recipes."
+    />
+    <meta name="author" content="Eric Allen" />
+    <meta name="datePublished" content="2025-03-07" />
+    <meta name="og:title" content="Cooking w/ Veggies | Recipe Book" />
+    <meta name="og:description" content="A simple recipe book with some vegetarian recipes." />
+    <!-- ress is a modern-ish css normalizer to give us a consistent baseline for styles -->
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" href="./recipe-book.css" />
+  </head>
+  <body autocomplete="off">
+    <main id="recipe-book">
+      <h1>Recipe Book</h1>
+      <section id="recipes">
+        <ol class="recipe-list">
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <!-- Recipe Markup Schema -->
+              <script type="application/ld+json">
+                {
+                  "@context": "https://schema.org/",
+                  "@type": "Recipe",
+                  "name": "Souther-style Cornbread Stuffing (Vegetarian)",
+                  "image": [],
+                  "author": {
+                    "@type": "Person",
+                    "name": "Eric Allen"
+                  },
+                  "datePublished": "2025-03-07",
+                  "description": "A vegetarian version of my grandma's cornbread stuffing recipe. Enjoyed at Thanksgiving for decades.",
+                  "recipeCuisine": "American",
+                  "prepTime": "PT150M",
+                  "cookTime": "PT30M",
+                  "totalTime": "PT45M",
+                  "keywords": "vegetarian, cornbread, stuffing, thanksgiving",
+                  "recipeYield": "10 servings",
+                  "recipeCategory": "Dinner",
+                  "recipeIngredient": [
+                    "2 boxes of cornbread mix",
+                    "1 tbsp of cane sugar",
+                    "12 strips of veggie bacon",
+                    "1 large yellow onion, diced",
+                    "6 stalks of celery, diced",
+                    "3 cups of veggie broth",
+                    "1 tsp of kosher salt",
+                    "1 tbsp of cracked blackpepper"
+                  ],
+                  "recipeInstructions": [
+                    {
+                      "@type": "HowToStep",
+                      "name": "Make the cornbread mix",
+                      "text": "Make the cornbread mix according to the instructions on the box; add the sugar to the mix. Let this sit overnight in the refrigerator.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Cook the bacon",
+                      "text": "Fry the bacon in a pan unitl it's a little crispy. Add a little butter to the pan to help the veggie bacon produce some grease.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Chop the bacon",
+                      "text": "Remove the bacon from the pan, but leave the grease. Chop the bacon into small bits.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Cook the veggies",
+                      "text": "Add the onion and celery to the pan and cook until they are soft. Add salt and pepper to taste.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Crumb the cornbread",
+                      "text": "Use a fork to crumble the cornbread.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Mix the bacon and veggies into the cornbread",
+                      "text": "Mix the chopped bacon and veggies into the cornbread. Stir with the fork to mix well.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Add the broth",
+                      "text": "Pour ~2 cups of the veggie broth onto the cornbread mixture; mix well with the fork.",
+                    },
+                    {
+                      "@type": "HowToStep",
+                      "name": "Bake",
+                      "text": "Bake for 15 minutes; add a little more broth if it gets too dry.",
+                    }
+                  ],
+                }
+              </script>
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Vegetarian Cornbread Stuffing</h2>
+                <p class="recipe__header__prep-time"><strong>Prep Time:</strong> 30 minutes</p>
+                <p class="recipe__header__serves"><strong>Serves:</strong> serves 10 adults</p>
+              </header>
+              <!--
+              Firefox likes to keep the state of the checkboxes,
+              which is nice if your phone accidentally reloads the page,
+              but not as nice if you want to start the recipe over.
+              So we're going to wrap each recipe in a form and show a reset
+              button in the footer if any items are checked.
+              -->
+              <form class="recipe__form" id="recipe-1-form">
+                <div class="recipe__description">
+                  <p>
+                    This is a vegetarian version of my grandma's cornbread stuffing
+                    recipe. Enjoyed at Thanksgiving for decades.
+                  </p>
+                </div>
+                <div class="recipe__notes">
+                  <p>
+                    <strong>Protip:</strong> This recipe works best if you make the
+                    cornbread the night before and let it sit in the refrigerator
+                    overnight.
+                  </p>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Ingredients</h3>
+                  <ul class="recipe__items_list util--checkbox-list">
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-recipe-1-ingredient-1">
+                          <input type="checkbox" id="recipe-1-recipe-1-ingredient-1" />
+                          <code>2 boxes</code> of cornbread mix
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-1-ingredient-1-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-1-ingredient-1-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I prefer the Trader Joe's brand with the little bits of
+                            corn in it, but my grandmother swore by Jiffy. The
+                            vegetarian Jiffy mix isn't as good as the omnivore one,
+                            though.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-2">
+                          <input type="checkbox" id="recipe-1-ingredient-2" />
+                          <code>2 tbsp</code> of cane sugar
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-3">
+                          <input type="checkbox" id="recipe-1-ingredient-3" />
+                          <code>12 strips</code> of veggie bacon
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-1-ingredient-3-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-1-ingredient-3-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I like to make my own with thin strips of tempeh marinated
+                            in coconut aminos and smokey bbq suace with some smoked
+                            salt and chipotle chili powder on top.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-4">
+                          <input type="checkbox" id="recipe-1-ingredient-4" />
+                          <code>1</code> large yellow onion, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-5">
+                          <input type="checkbox" id="recipe-1-ingredient-5" />
+                          <code>6 stalks</code> of celery, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-6">
+                          <input type="checkbox" id="recipe-1-ingredient-6" />
+                          <code>3 cups</code> of veggie broth
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-7">
+                          <input type="checkbox" id="recipe-1-ingredient-7" />
+                          <code>1 tsp</code> of kosher salt
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-ingredient-8">
+                          <input type="checkbox" id="recipe-1-ingredient-8" />
+                          <code>1 tbsp</code> of cracked blackpepper
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Instructions</h3>
+                  <ol
+                    class="recipe__items_list util--checkbox-list"
+                  >
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-0">
+                          <input type="checkbox" id="recipe-1-instruction-0" />
+                          Make the cornbread mix according to the instructions on the
+                          box; add the sugar to the mix. Let this sit overnight in the
+                          refrigerator.
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-1-instruction-0-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-1-instruction-0-popover"
+                          class="recipe__items-list__note"
+                          popover
+                        >
+                          Use the instructions for a sheet pan to make a "Johnny Cake"
+                          instead of muffins.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-1">
+                          <input type="checkbox" id="recipe-1-instruction-1" />
+                          Preheat the over to <code>325°F</code>
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-2">
+                          <input type="checkbox" id="recipe-1-instruction-2" />
+                          Fry the bacon in a pan unitl it's a little crispy. Add a
+                          little butter to the pan to help the veggie bacon produce some
+                          grease.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-3">
+                          <input type="checkbox" id="recipe-1-instruction-3" />
+                          Remove the bacon from the pan, but leave the grease. Chop the
+                          bacon into small bits.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-4">
+                          <input type="checkbox" id="recipe-1-instruction-4" />
+                          Add the onion and celery to the pan and cook until they are
+                          soft. Add salt and pepper to taste.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-5">
+                          <input type="checkbox" id="recipe-1-instruction-5" />
+                          Use a fork to crumble the cornbread
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-6">
+                          <input type="checkbox" id="recipe-1-instruction-6" />
+                          Mix the chopped bacon and veggies into the cornbread. Stir
+                          with the fork to mix well.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-7">
+                          <input type="checkbox" id="recipe-1-instruction-7" />
+                          Pour <code>~2 cups</code> of the veggie broth onto the
+                          cornbread mixture; mix well with the fork.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-1-instruction-8">
+                          <input type="checkbox" id="recipe-1-instruction-8" />
+                          Bake for <code>15 minutes</code>; add a little more broth if
+                          it gets too dry
+                        </label>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </form>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-1-form">Reset</button>
+                <input type="checkbox" id="recipe-1-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-1-toggle">
+                    <span class="recipe__footer__toggle__label__span"></span>
+                  </label>
+                </button>
+              </footer>
+            </article>
+          </li>
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <!--
+                Recipe Markup Schema Omitted since this is just an example to show rendering
+                of muiltiple recipes in the same document.
+              -->
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Vegetarian Cornbread Stuffing</h2>
+                <p class="recipe__header__prep-time"><strong>Prep Time:</strong> 30 minutes</p>
+                <p class="recipe__header__serves"><strong>Serves:</strong> serves 10 adults</p>
+              </header>
+              <!--
+              Firefox likes to keep the state of the checkboxes,
+              which is nice if your phone accidentally reloads the page,
+              but not as nice if you want to start the recipe over.
+              So we're going to wrap each recipe in a form and show a reset
+              button in the footer if any items are checked.
+              -->
+              <form class="recipe__form" id="recipe-2-form">
+                <div class="recipe__description">
+                  <p>
+                    This is a vegetarian version of my grandma's cornbread stuffing
+                    recipe. Enjoyed at Thanksgiving for decades.
+                  </p>
+                </div>
+                <div class="recipe__notes">
+                  <p>
+                    <strong>Protip:</strong> This recipe works best if you make the
+                    cornbread the night before and let it sit in the refrigerator
+                    overnight.
+                  </p>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Ingredients</h3>
+                  <ul class="recipe__items_list util--checkbox-list">
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-1">
+                          <input type="checkbox" id="recipe-2-ingredient-1" />
+                          <code>2 boxes</code> of cornbread mix
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-2-ingredient-1-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-2-ingredient-1-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I prefer the Trader Joe's brand with the little bits of
+                            corn in it, but my grandmother swore by Jiffy. The
+                            vegetarian Jiffy mix isn't as good as the omnivore one,
+                            though.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-2">
+                          <input type="checkbox" id="recipe-2-ingredient-2" />
+                          <code>2 tbsp</code> of cane sugar
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-3">
+                          <input type="checkbox" id="recipe-2-ingredient-3" />
+                          <code>12 strips</code> of veggie bacon
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-2-ingredient-3-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-2-ingredient-3-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I like to make my own with thin strips of tempeh marinated
+                            in coconut aminos and smokey bbq suace with some smoked
+                            salt and chipotle chili powder on top.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-4">
+                          <input type="checkbox" id="recipe-2-ingredient-4" />
+                          <code>1</code> large yellow onion, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-5">
+                          <input type="checkbox" id="recipe-2-ingredient-5" />
+                          <code>6 stalks</code> of celery, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-6">
+                          <input type="checkbox" id="recipe-2-ingredient-6" />
+                          <code>3 cups</code> of veggie broth
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-7">
+                          <input type="checkbox" id="recipe-2-ingredient-7" />
+                          <code>1 tsp</code> of kosher salt
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-ingredient-8">
+                          <input type="checkbox" id="recipe-2-ingredient-8" />
+                          <code>1 tbsp</code> of cracked blackpepper
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Instructions</h3>
+                  <ol
+                    class="recipe__items_list util--checkbox-list"
+                  >
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-0">
+                          <input type="checkbox" id="recipe-2-instruction-0" />
+                          Make the cornbread mix according to the instructions on the
+                          box; add the sugar to the mix. Let this sit overnight in the
+                          refrigerator.
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-2-instruction-0-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-2-instruction-0-popover"
+                          class="recipe__items-list__note"
+                          popover
+                        >
+                          Use the instructions for a sheet pan to make a "Johnny Cake"
+                          instead of muffins.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-1">
+                          <input type="checkbox" id="recipe-2-instruction-1" />
+                          Preheat the over to <code>325°F</code>
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-2">
+                          <input type="checkbox" id="recipe-2-instruction-2" />
+                          Fry the bacon in a pan unitl it's a little crispy. Add a
+                          little butter to the pan to help the veggie bacon produce some
+                          grease.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-3">
+                          <input type="checkbox" id="recipe-2-instruction-3" />
+                          Remove the bacon from the pan, but leave the grease. Chop the
+                          bacon into small bits.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-4">
+                          <input type="checkbox" id="recipe-2-instruction-4" />
+                          Add the onion and celery to the pan and cook until they are
+                          soft. Add salt and pepper to taste.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-5">
+                          <input type="checkbox" id="recipe-2-instruction-5" />
+                          Use a fork to crumble the cornbread
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-6">
+                          <input type="checkbox" id="recipe-2-instruction-6" />
+                          Mix the chopped bacon and veggies into the cornbread. Stir
+                          with the fork to mix well.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-7">
+                          <input type="checkbox" id="recipe-2-instruction-7" />
+                          Pour <code>~2 cups</code> of the veggie broth onto the
+                          cornbread mixture; mix well with the fork.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-2-instruction-8">
+                          <input type="checkbox" id="recipe-2-instruction-8" />
+                          Bake for <code>15 minutes</code>; add a little more broth if
+                          it gets too dry
+                        </label>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </form>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-2-form">Reset</button>
+                <input type="checkbox" id="recipe-2-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-2-toggle"><span class="recipe__footer__toggle__label__span"></span></label>
+                </button>
+              </footer>
+            </article>
+          </li>
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <!--
+                Recipe Markup Schema Omitted since this is just an example to show rendering
+                of muiltiple recipes in the same document.
+              -->
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Vegetarian Cornbread Stuffing</h2>
+                <p class="recipe__header__prep-time"><strong>Prep Time:</strong> 30 minutes</p>
+                <p class="recipe__header__serves"><strong>Serves:</strong> serves 10 adults</p>
+              </header>
+              <!--
+              Firefox likes to keep the state of the checkboxes,
+              which is nice if your phone accidentally reloads the page,
+              but not as nice if you want to start the recipe over.
+              So we're going to wrap each recipe in a form and show a reset
+              button in the footer if any items are checked.
+              -->
+              <form class="recipe__form" id="recipe-3-form">
+                <div class="recipe__description">
+                  <p>
+                    This is a vegetarian version of my grandma's cornbread stuffing
+                    recipe. Enjoyed at Thanksgiving for decades.
+                  </p>
+                </div>
+                <div class="recipe__notes">
+                  <p>
+                    <strong>Protip:</strong> This recipe works best if you make the
+                    cornbread the night before and let it sit in the refrigerator
+                    overnight.
+                  </p>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Ingredients</h3>
+                  <ul class="recipe__items_list util--checkbox-list">
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-1">
+                          <input type="checkbox" id="recipe-3-ingredient-1" />
+                          <code>2 boxes</code> of cornbread mix
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-3-ingredient-1-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-3-ingredient-1-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I prefer the Trader Joe's brand with the little bits of
+                            corn in it, but my grandmother swore by Jiffy. The
+                            vegetarian Jiffy mix isn't as good as the omnivore one,
+                            though.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-2">
+                          <input type="checkbox" id="recipe-3-ingredient-2" />
+                          <code>2 tbsp</code> of cane sugar
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-3">
+                          <input type="checkbox" id="recipe-3-ingredient-3" />
+                          <code>12 strips</code> of veggie bacon
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-3-ingredient-3-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-3-ingredient-3-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I like to make my own with thin strips of tempeh marinated
+                            in coconut aminos and smokey bbq suace with some smoked
+                            salt and chipotle chili powder on top.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-4">
+                          <input type="checkbox" id="recipe-3-ingredient-4" />
+                          <code>1</code> large yellow onion, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-5">
+                          <input type="checkbox" id="recipe-3-ingredient-5" />
+                          <code>6 stalks</code> of celery, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-6">
+                          <input type="checkbox" id="recipe-3-ingredient-6" />
+                          <code>3 cups</code> of veggie broth
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-7">
+                          <input type="checkbox" id="recipe-3-ingredient-7" />
+                          <code>1 tsp</code> of kosher salt
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-ingredient-8">
+                          <input type="checkbox" id="recipe-3-ingredient-8" />
+                          <code>1 tbsp</code> of cracked blackpepper
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Instructions</h3>
+                  <ol
+                    class="recipe__items_list util--checkbox-list"
+                  >
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-0">
+                          <input type="checkbox" id="recipe-3-instruction-0" />
+                          Make the cornbread mix according to the instructions on the
+                          box; add the sugar to the mix. Let this sit overnight in the
+                          refrigerator.
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-3-instruction-0-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-3-instruction-0-popover"
+                          class="recipe__items-list__note"
+                          popover
+                        >
+                          Use the instructions for a sheet pan to make a "Johnny Cake"
+                          instead of muffins.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-1">
+                          <input type="checkbox" id="recipe-3-instruction-1" />
+                          Preheat the over to <code>325°F</code>
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-2">
+                          <input type="checkbox" id="recipe-3-instruction-2" />
+                          Fry the bacon in a pan unitl it's a little crispy. Add a
+                          little butter to the pan to help the veggie bacon produce some
+                          grease.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-3">
+                          <input type="checkbox" id="recipe-3-instruction-3" />
+                          Remove the bacon from the pan, but leave the grease. Chop the
+                          bacon into small bits.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-4">
+                          <input type="checkbox" id="recipe-3-instruction-4" />
+                          Add the onion and celery to the pan and cook until they are
+                          soft. Add salt and pepper to taste.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-5">
+                          <input type="checkbox" id="recipe-3-instruction-5" />
+                          Use a fork to crumble the cornbread
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-6">
+                          <input type="checkbox" id="recipe-3-instruction-6" />
+                          Mix the chopped bacon and veggies into the cornbread. Stir
+                          with the fork to mix well.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-7">
+                          <input type="checkbox" id="recipe-3-instruction-7" />
+                          Pour <code>~2 cups</code> of the veggie broth onto the
+                          cornbread mixture; mix well with the fork.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-3-instruction-8">
+                          <input type="checkbox" id="recipe-3-instruction-8" />
+                          Bake for <code>15 minutes</code>; add a little more broth if
+                          it gets too dry
+                        </label>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </form>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-3-form">Reset</button>
+                <input type="checkbox" id="recipe-3-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-3-toggle"><span class="recipe__footer__toggle__label__span"></span></label>
+                </button>
+              </footer>
+            </article>
+          </li>
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <!--
+                Recipe Markup Schema Omitted since this is just an example to show rendering
+                of muiltiple recipes in the same document.
+              -->
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Vegetarian Cornbread Stuffing</h2>
+                <p class="recipe__header__prep-time"><strong>Prep Time:</strong> 30 minutes</p>
+                <p class="recipe__header__serves"><strong>Serves:</strong> serves 10 adults</p>
+              </header>
+              <!--
+              Firefox likes to keep the state of the checkboxes,
+              which is nice if your phone accidentally reloads the page,
+              but not as nice if you want to start the recipe over.
+              So we're going to wrap each recipe in a form and show a reset
+              button in the footer if any items are checked.
+              -->
+              <form class="recipe__form" id="recipe-4-form">
+                <div class="recipe__description">
+                  <p>
+                    This is a vegetarian version of my grandma's cornbread stuffing
+                    recipe. Enjoyed at Thanksgiving for decades.
+                  </p>
+                </div>
+                <div class="recipe__notes">
+                  <p>
+                    <strong>Protip:</strong> This recipe works best if you make the
+                    cornbread the night before and let it sit in the refrigerator
+                    overnight.
+                  </p>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Ingredients</h3>
+                  <ul class="recipe__items_list util--checkbox-list">
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-1">
+                          <input type="checkbox" id="recipe-4-ingredient-1" />
+                          <code>2 boxes</code> of cornbread mix
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-4-ingredient-1-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-4-ingredient-1-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I prefer the Trader Joe's brand with the little bits of
+                            corn in it, but my grandmother swore by Jiffy. The
+                            vegetarian Jiffy mix isn't as good as the omnivore one,
+                            though.
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-2">
+                          <input type="checkbox" id="recipe-4-ingredient-2" />
+                          <code>2 tbsp</code> of cane sugar
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-3">
+                          <input type="checkbox" id="recipe-4-ingredient-3" />
+                          <code>12 strips</code> of veggie bacon
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-4-ingredient-3-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-4-ingredient-3-popover"
+                          class="recipe__ingredients__note"
+                          popover
+                        >
+                          <p>
+                            I like to make my own with thin strips of tempeh marinated
+                            in coconut aminos and smokey bbq suace with some smoked
+                            salt and chipotle chili powder on top.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-4">
+                          <input type="checkbox" id="recipe-4-ingredient-4" />
+                          <code>1</code> large yellow onion, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-5">
+                          <input type="checkbox" id="recipe-4-ingredient-5" />
+                          <code>6 stalks</code> of celery, diced
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-6">
+                          <input type="checkbox" id="recipe-4-ingredient-6" />
+                          <code>3 cups</code> of veggie broth
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-7">
+                          <input type="checkbox" id="recipe-4-ingredient-7" />
+                          <code>1 tsp</code> of kosher salt
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-ingredient-8">
+                          <input type="checkbox" id="recipe-4-ingredient-8" />
+                          <code>1 tbsp</code> of cracked blackpepper
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="recipe__items">
+                  <h3 class="recipe__form__header">Instructions</h3>
+                  <ol
+                    class="recipe__items_list util--checkbox-list"
+                  >
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-0">
+                          <input type="checkbox" id="recipe-4-instruction-0" />
+                          Make the cornbread mix according to the instructions on the
+                          box; add the sugar to the mix. Let this sit overnight in the
+                          refrigerator.
+                        </label>
+                        <button class="recipe__items-list__note__trigger" popovertarget="recipe-4-instruction-0-popover" type="button">
+                          ?
+                        </button>
+                        <div
+                          id="recipe-4-instruction-0-popover"
+                          class="recipe__items-list__note"
+                          popover
+                        >
+                          Use the instructions for a sheet pan to make a "Johnny Cake"
+                          instead of muffins.
+                        </p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-1">
+                          <input type="checkbox" id="recipe-4-instruction-1" />
+                          Preheat the over to <code>325°F</code>
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-2">
+                          <input type="checkbox" id="recipe-4-instruction-2" />
+                          Fry the bacon in a pan unitl it's a little crispy. Add a
+                          little butter to the pan to help the veggie bacon produce some
+                          grease.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-3">
+                          <input type="checkbox" id="recipe-4-instruction-3" />
+                          Remove the bacon from the pan, but leave the grease. Chop the
+                          bacon into small bits.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-4">
+                          <input type="checkbox" id="recipe-4-instruction-4" />
+                          Add the onion and celery to the pan and cook until they are
+                          soft. Add salt and pepper to taste.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-5">
+                          <input type="checkbox" id="recipe-4-instruction-5" />
+                          Use a fork to crumble the cornbread
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-6">
+                          <input type="checkbox" id="recipe-4-instruction-6" />
+                          Mix the chopped bacon and veggies into the cornbread. Stir
+                          with the fork to mix well.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-7">
+                          <input type="checkbox" id="recipe-4-instruction-7" />
+                          Pour <code>~2 cups</code> of the veggie broth onto the
+                          cornbread mixture; mix well with the fork.
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="recipe__items-list__item">
+                        <label for="recipe-4-instruction-8">
+                          <input type="checkbox" id="recipe-4-instruction-8" />
+                          Bake for <code>15 minutes</code>; add a little more broth if
+                          it gets too dry
+                        </label>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </form>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-4-form">Reset</button>
+                <input type="checkbox" id="recipe-4-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-4-toggle"><span class="recipe__footer__toggle__label__span"></span></label>
+                </button>
+              </footer>
+            </article>
+          </li>
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Some Carl Sagan Ipsum</h2>
+              </header>
+              <div class="recipe__description">
+                <p>Bits of moving fluff science <code>star stuff harvesting star light</code> brain is the seed of intelligence radio telescope as a patch of light.</p>
+                <p>At the edge of forever the carbon in our apple pies Flatland dream of the mind's eye descended from astronomers <code>vanquish the impossible</code>. Descended from astronomers inconspicuous motes of rock and gas descended from astronomers cosmic fugue dream of the mind's eye <code>something incredible is waiting to be known</code>.</p>
+                <p>Emerged into consciousness laws of physics billions upon billions globular star cluster hundreds of thousands Cambrian explosion? The sky calls to us <code>vanquish the impossible</code> descended from astronomers rich in mystery courage of our questions great turbulent clouds. From which we spring concept of the number one a mote of dust suspended in a sunbeam with pretty stories for which there's little good evidence take root and flourish <code>extraordinary claims require extraordinary evidence</code> and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+              </div>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-5-form">Reset</button>
+                <input type="checkbox" id="recipe-5-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-5-toggle"><span class="recipe__footer__toggle__label__span"></span></label>
+                </button>
+              </footer>
+            </article>
+          </li>
+          <li class="recipe-list__item">
+            <article class="recipe">
+              <header class="recipe__header">
+                <h2 class="recipe__header__title">Not Really a Recipe</h2>
+              </header>
+              <form class="recipe__form" id="recipe-6-form">
+                <div class="recipe__description">
+                  <p>
+                    This is just a test of really short items in the list.
+                  </p>
+                </div>
+              </form>
+              <footer class="recipe__footer">
+                <button type="reset" class="recipe__footer__reset" form="recipe-6-form">Reset</button>
+                <input type="checkbox" id="recipe-6-toggle" class="recipe__footer__toggle" checked>
+                  <label for="recipe-6-toggle"><span class="recipe__footer__toggle__label__span"></span></label>
+                </button>
+              </footer>
+            </article>
+          </li>
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>
