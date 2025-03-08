@@ -28,6 +28,8 @@ I decided to take things a few steps further to provide a better user experience
   - support for `prefers-reduced-motion` system preference
   - support for `prefers-color-scheme: dark` system preference
     - **Note**: There are some hacks that allow you to implement a dark/light mode toggle button (technically a checkbox like the show/hide functionality we're using to expand our cards), but that seemed out of the scope of this particular challenge.
+  - Fluid layout when resizing text with browser zoom controls
+- Native HTML `popover`s for extra notes about a recipe
 
 ## JavaScript Sorting Challenge
 

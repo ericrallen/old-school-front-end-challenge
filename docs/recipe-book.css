@@ -397,10 +397,14 @@ ul:not(.util--bullets) {
   background: linear-gradient(
     to bottom,
     rgba(var(--background), 0) 0%,
-    rgba(var(--background), 0.25) 60%,
-    rgba(var(--background), 0.75) 85%,
-    rgba(var(--background), 1) 100%
+    rgba(var(--background), 0.2) 60%,
+    rgba(var(--background), 0.4) 85%,
+    rgba(var(--background), 0.6) 100%
   );
+
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 .recipe__footer__reset {
@@ -450,35 +454,15 @@ ul:not(.util--bullets) {
   content: "Show More";
 }
 
-/* Height toggling behavior */
 .recipe-list__item:has(.recipe__footer__toggle:checked) {
   max-height: 40vh;
   transition-timing-function: ease, ease-out;
 }
 
 .recipe-list__item:has(.recipe__footer__toggle:not(:checked)) {
-  max-height: 10000px; /* Large enough to fit any recipe */
+  /* HACK: height large enough to fit any recipe so we can transition */
+  max-height: 10000px;
   transition-timing-function: ease, ease-in;
-}
-
-/* Add a subtle indicator that there's more content */
-.recipe-list__item:has(.recipe__footer__toggle:checked)::after {
-  content: "";
-  position: absolute;
-  bottom: 2.5rem; /* Position above the footer */
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(var(--background), 0.5) 70%,
-    rgba(var(--background), 0.9) 100%
-  );
-  pointer-events: none;
-  /* Always show the gradient in collapsed state for simplicity and cross-browser compatibility */
-  opacity: 1;
-  transition: opacity 0.3s ease;
 }
 
 /*
