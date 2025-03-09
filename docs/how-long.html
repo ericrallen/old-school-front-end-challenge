@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>How Long | How Long Until this is Over?</title>
+    <!-- ress is a modern-ish css normalizer to give us a consistent baseline for styles -->
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" href="./how-long.css" />
+  </head>
+  <body>
+    <main id="how-long">
+      <div class="container">
+        <h1>When can I go home?</h1>
+        <p>
+          This is a simple web interface for the project described in Part Two
+          of this
+          <a
+            href="https://github.com/ericrallen/old-school-front-end-challenge"
+            target="_blank"
+            rel="noopener noreferrer"
+            >repository</a
+          >. The <strong>BIG NUMBERS</strong> button will calculate the wait
+          time for a list of 10,000 names and the
+          <strong>REALLY BIG NUMBERS</strong> button will calculate the wait
+          time for a list of 1,000,000 names.
+        </p>
+        <div id="results"></div>
+        <form id="how-long-form" action="">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" value="Zane" />
+          <label for="judges">Number of Judges</label>
+          <input type="number" id="judges" name="judges" value="1" />
+          <label for="names">Names of Other People in Line</label>
+          <input
+            type="text"
+            id="names"
+            name="names"
+            value="Mark Hank Ana Vivian"
+          />
+          <p class="form-hint">
+            Please enter the first names of the people in line, separated by
+            spaces.
+          </p>
+          <button id="calculate" type="submit">Calculate</button>
+          <button id="big-numbers" type="button">BIG NUMBERS</button>
+          <button id="really-big-numbers" type="button">
+            REALLY BIG NUMBERS
+          </button>
+          <button id="clear" type="button">Clear</button>
+        </form>
+      </div>
+    </main>
+    <script type="text/javascript" src="./how-long.js"></script>
+  </body>
+</html>

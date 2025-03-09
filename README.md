@@ -351,8 +351,6 @@ function newCourt(name = "", judges = 0, waitingList = ""): number {
 
       waitingNames.push(name);
 
-      const waitingNamesNew = [name, ...waitingList.split(" ")];
-
       const sortedNames = waitingNames.sort();
 
       const nameIndex = sortedNames.indexOf(name);
@@ -655,8 +653,31 @@ I wired up another performance benchmark that lets us test different ways of sor
 
 So, it looks like the way that the engine optimizes `Array.prototype.sort()` is the fastest approach for us without pulling in a 3rd party library or writing our own implemetation of another, more complicated sorting algorithm.
 
-Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now.
+**Note**: You can also see how different the results are for a bunch of different algorithms depending on your browser:
+
+<iframe src="https://measurethat.net/Embed?id=591284" width="100%" height="500px"></iframe>
+
+[Here's one from my browser](https://www.measurethat.net/Benchmarks/ShowResult/591284), but you can look at the [other results](https://www.measurethat.net/Benchmarks/ListResults/3549) showing differences in Chrome.
+
+Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now. If things truly ended up at a bottleneck, we could investigate some strategies like:
+
+- converting the strings to a numeric representation and using `TypedArray`s for sorting at a lower level
+- chunking the data, sorting the chunks, and then merging the sorted chunks
+  - We could also investigate parallelizing the chunks with Workers
+- implementing a more robust sorting algorithm
+  - This will likely have impacts in various runtimes, so it would depend on the expect encironment and usecase
+- Counting duplicates and converting the `Array` to a `Set` to remove duplicates before sorting and then using the duplicate count to inject
 
 ### Conclusion
 
-Running the `perf.test.ts` which uses a random string of between `1,000,000` and `2,000,000` space separated names executes in ~1.25 seconds on average, and I think that's good enough for now.
+| Runtime | Mean     | Median   | Mode\*  | Iterations | Avg. Items |
+| ------- | -------- | -------- | ------- | ---------- | ---------- |
+| Bun     | 37.976ms | 37.284ms | 17.2ms  | 1000       | 301025     |
+| Node    | 38.640ms | 36.899ms | 26.74ms | 1000       | 302644     |
+| Deno    | 35.168ms | 34.359ms | 11.31ms | 1000       | 299598     |
+
+_\* These tests rarely had a frequently repeated value, so the mode might only represent a handful of values ._
+
+You can see the browser verion at [ericrallen.github.io/old-school-front-end-challenge/how-long.html](https://ericrallen.github.io/old-school-front-end-challenge/how-long.html). With 1,000,000 participants it executes in ~130-160ms and with 10,000 participants it has nearly sub-submillisecond response time.
+
+I think that's enough for me to feel satisfied with this exercise.

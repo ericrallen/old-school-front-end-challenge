@@ -1,0 +1,14 @@
+
+-[PERFORMANCE]-------------------
+
+    Mean: 38.64004ms
+    Median: 36.899ms
+    Mode: 26.74ms
+
+-[Configuration]-----------------
+
+    1000 iterations
+    Average participants: 302644
+    Average judges: 5
+
+---------------------------------

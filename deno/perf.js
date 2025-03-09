@@ -1,6 +1,4 @@
-import Bun from "bun";
-
-import { court } from "./index";
+import { court } from "./main.js";
 
 const NUMBER_OF_TESTS = 1000;
 const MIN_NUMBER_OF_NAMES = 100000;
@@ -95,7 +93,7 @@ const averages = {
   ),
   mode: Number(
     Object.entries(
-      results.reduce((acc: Record<string, number>, result) => {
+      results.reduce((acc, result) => {
         const roundedDuration = result.duration.toFixed(2);
         acc[roundedDuration] = (acc[roundedDuration] || 0) + 1;
         return acc;
@@ -126,7 +124,7 @@ const output = `\n-[PERFORMANCE]-------------------\n
     Average judges: ${averages.judges}
 \n---------------------------------\n`;
 
-await Bun.write("perf.txt", output);
+await Deno.writeTextFile("perf.txt", output);
 
 console.clear();
 console.log(output);

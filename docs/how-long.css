@@ -1,0 +1,201 @@
+/*
+  NOTE: In order to avoid a bunch of boilerplate reset code at the top of this file,
+  this stylesheet relies on the underlying HTML page importing the `ress` CSS reset
+  
+  Stylesheet: https://unpkg.com/ress/dist/ress.min.css
+  Docs: https://ress.page/docs
+*/
+
+:root {
+  font-size: 14px;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  --background: 247, 247, 247;
+  --foreground: 23, 23, 23;
+
+  --color-background: #f7f7f7;
+  --color-foreground: #232323;
+  --color-border: #ccc;
+
+  /* we're going to use this to style some non-link stuff in a link-like way */
+  --color-link: #0000ee;
+
+  /* we're going to use this to style some marker-like effects */
+  --highlight: rgb(236, 203, 52);
+  --cross-out: rgb(22, 22, 52);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 23, 23, 23;
+    --foreground: 247, 247, 247;
+
+    --color-background: #232323;
+    --color-foreground: #f7f7f7;
+    --color-border: #ccc;
+
+    --color-link: #43afe9;
+
+    --highlight: 165, 234, 142;
+    --cross-out: 213, 213, 235;
+  }
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100%;
+  min-width: 100%;
+  height: 100%;
+  width: 100%;
+  font-size: 1rem;
+
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+
+  /* force a vertical scrollbar to avoid any layout shifts when toggling content */
+  overflow-y: scroll;
+  /* hide horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+/* borrowed from: https://piccalil.li/blog/a-more-modern-css-reset/ */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+/* A elements that don't have a class get default styles */
+/* borrowed from: https://piccalil.li/blog/a-more-modern-css-reset/ */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: var(--color-link);
+}
+
+/* fix focus reset from ress */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 1px solid var(--color-link);
+  outline-width: initial;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+  outline-width: initial;
+  appearance: none;
+  appearance: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 600;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol,
+ul {
+  padding-left: 1rem;
+}
+
+ol:not(.util--bullets),
+ul:not(.util--bullets) {
+  list-style-type: none;
+  padding-left: initial;
+}
+
+#how-long {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  min-width: 100%;
+  padding: 1rem;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  max-width: 600px;
+}
+
+.container h1 {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.container p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+#results {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container form label {
+  font-size: 1.5rem;
+}
+
+.container form input {
+  font-size: 1.5rem;
+}
+
+.container form .form-hint {
+  font-size: 1rem;
+  color: var(--color-border);
+}
+
+.container form button {
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  cursor: pointer;
+}
+
+/* Borrowed from: https://css-tricks.com/nuking-motion-with-prefers-reduced-motion/ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
