@@ -1,4 +1,4 @@
-const PRINT_METRICS = true;
+const PRINT_METRICS = false;
 
 if (PRINT_METRICS) {
   console.time("runtime");
@@ -122,6 +122,10 @@ export function newCourt(name = "", judges = 0, waitingList = "") {
       }
 
       if (PRINT_METRICS) {
+        console.time("NEW split");
+      }
+
+      if (PRINT_METRICS) {
         console.time("combine names");
       }
 
@@ -147,7 +151,9 @@ export function newCourt(name = "", judges = 0, waitingList = "") {
       if (PRINT_METRICS) {
         console.time("sort");
       }
-      const sortedNames = waitingNames.sort();
+      const sortedNames = waitingNames.sort((a, b) => {
+        return a.localeCompare(b);
+      });
       if (PRINT_METRICS) {
         console.timeEnd("sort");
       }

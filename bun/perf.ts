@@ -1,6 +1,6 @@
 import { court, newCourt } from "./index.perf";
 
-const NUMBER_OF_TESTS = 1;
+const NUMBER_OF_TESTS = 10;
 const MIN_NUMBER_OF_NAMES = 100000;
 const MAX_NUMBER_OF_NAMES = 500000;
 const MIN_NUMBER_OF_JUDGES = 1;
@@ -38,21 +38,22 @@ const PHONETIC_ALPHABET = [
 const numberOfNamesInIteration = [];
 const numberOfJudgesInIteration = [];
 
+console.clear();
 console.log("Gathering performance data...\n");
 
 console.log("Running old implementation...");
 
 for (let i = 0; i < NUMBER_OF_TESTS; i++) {
   const numberOfNames =
-    // Math.floor(Math.random() * (MAX_NUMBER_OF_NAMES - MIN_NUMBER_OF_NAMES)) +
-    //MIN_NUMBER_OF_NAMES;
-    MAX_NUMBER_OF_NAMES;
+    Math.floor(Math.random() * (MAX_NUMBER_OF_NAMES - MIN_NUMBER_OF_NAMES)) +
+    MIN_NUMBER_OF_NAMES;
+  // MAX_NUMBER_OF_NAMES;
   numberOfNamesInIteration.push(numberOfNames);
 
   const numberOfJudges =
-    //Math.floor(Math.random() * (MAX_NUMBER_OF_JUDGES - MIN_NUMBER_OF_JUDGES)) +
-    //MIN_NUMBER_OF_JUDGES;
-    MAX_NUMBER_OF_JUDGES / 2;
+    Math.floor(Math.random() * (MAX_NUMBER_OF_JUDGES - MIN_NUMBER_OF_JUDGES)) +
+    MIN_NUMBER_OF_JUDGES;
+  // MAX_NUMBER_OF_JUDGES / 2;
   numberOfJudgesInIteration.push(numberOfJudges);
 
   const names = Array.from(
@@ -117,26 +118,26 @@ const oldAverages = {
 console.log("\n-[PERFORMANCE]-------------------\n");
 console.log(`    Mean: ${oldAverages.mean}ms`);
 console.log(`    Median: ${oldAverages.median}ms`);
-console.log(`    Mode: ${oldAverages.mode}ms\n`);
-console.log("-[Configuration]-----------------\n");
+console.log(`    Mode: ${oldAverages.mode}ms`);
+console.log("\n-[Configuration]-----------------\n");
 console.log(`    ${NUMBER_OF_TESTS} iterations`);
 console.log(`    Average participants: ${oldAverages.names}`);
-console.log(`    Average judges: ${oldAverages.judges}\n`);
-console.log("---------------------------------\n\n");
+console.log(`    Average judges: ${oldAverages.judges}`);
+console.log("\n---------------------------------\n");
 
 console.log("Running new implementation...");
 
 for (let i = 0; i < NUMBER_OF_TESTS; i++) {
   const numberOfNames =
-    // Math.floor(Math.random() * (MAX_NUMBER_OF_NAMES - MIN_NUMBER_OF_NAMES)) +
-    //MIN_NUMBER_OF_NAMES;
-    MAX_NUMBER_OF_NAMES;
+    Math.floor(Math.random() * (MAX_NUMBER_OF_NAMES - MIN_NUMBER_OF_NAMES)) +
+    MIN_NUMBER_OF_NAMES;
+  // MAX_NUMBER_OF_NAMES;
   numberOfNamesInIteration.push(numberOfNames);
 
   const numberOfJudges =
-    //Math.floor(Math.random() * (MAX_NUMBER_OF_JUDGES - MIN_NUMBER_OF_JUDGES)) +
-    //MIN_NUMBER_OF_JUDGES;
-    MAX_NUMBER_OF_JUDGES / 2;
+    Math.floor(Math.random() * (MAX_NUMBER_OF_JUDGES - MIN_NUMBER_OF_JUDGES)) +
+    MIN_NUMBER_OF_JUDGES;
+  // MAX_NUMBER_OF_JUDGES / 2;
   numberOfJudgesInIteration.push(numberOfJudges);
 
   const names = Array.from(
@@ -201,12 +202,12 @@ const newAverages = {
 console.log("\n-[PERFORMANCE]-------------------\n");
 console.log(`    Mean: ${newAverages.mean}ms`);
 console.log(`    Median: ${newAverages.median}ms`);
-console.log(`    Mode: ${newAverages.mode}ms\n`);
-console.log("-[Configuration]-----------------\n");
+console.log(`    Mode: ${newAverages.mode}ms`);
+console.log("\n-[Configuration]-----------------\n");
 console.log(`    ${NUMBER_OF_TESTS} iterations`);
 console.log(`    Average participants: ${newAverages.names}`);
-console.log(`    Average judges: ${newAverages.judges}\n`);
-console.log("---------------------------------\n\n");
+console.log(`    Average judges: ${newAverages.judges}`);
+console.log("\n---------------------------------\n");
 
 console.log("\n-[SUMMARY]-----------------------\n");
 console.log(`    Old implementation: ${oldAverages.mean}ms`);
@@ -220,6 +221,6 @@ console.log(
       : `Old implementation is faster\n    by ${Math.abs(
           oldAverages.mean - newAverages.mean
         ).toFixed(5)}ms on average`
-  }\n`
+  }`
 );
-console.log("---------------------------------\n\n");
+console.log("\n---------------------------------\n");

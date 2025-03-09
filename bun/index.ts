@@ -24,9 +24,9 @@ export function court(name = "", judges = 0, waitingList = ""): number {
 
   waitingNames.push(name);
 
-  const sortedNames = waitingNames.sort();
+  waitingNames.sort();
 
-  const nameIndex = sortedNames.indexOf(name);
+  const nameIndex = waitingNames.indexOf(name);
 
   const waitTime = getWaitTime(nameIndex, judges);
 

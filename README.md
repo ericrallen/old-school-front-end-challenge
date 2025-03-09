@@ -309,7 +309,7 @@ Now, let's update our implementation and run both of the `getWaitTime()` impleme
 
 It looks like our new wait time calculation is a bit better, too. So let's swich over to that one and remove the old logic from our benchmarking:
 
-```logs
+```log
 [6.19ms] split
 [0.16ms] push
 [6.38ms] combine names
@@ -426,6 +426,237 @@ Everything else is about as good as it could be for this simple of a function.
 
 ### Make it fast(er)
 
-Let's dig into the reason you all came here, the `Make it fast.` part of our process.
+Let's dig into the reason you're all here: the `Make it fast.` part of our process.
 
-_Coming Soon..._
+There can be significant differences in how certain built-ins function across engines, so JavaScript performance isn't always a science - sometimes it's an art.
+
+#### Step one
+
+Our `getWaitTime()` method is pretty small, I wonder if we gain any performance benefit by removing the call to the function and just putting everythign into one function?
+
+```ts
+export function newCourt(name = "", judges = 0, waitingList = "") {
+  if (judges > 0) {
+    if (waitingList.length > 0) {
+      const waitingNames = waitingList.split(" ");
+
+      waitingNames.push(name);
+
+      const sortedNames = waitingNames.sort();
+
+      const nameIndex = sortedNames.indexOf(name);
+
+      if (nameIndex < judges) {
+        return APPOINTMENT_LENGTH;
+      }
+
+      const waitTime =
+        (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
+
+      return waitTime;
+    }
+
+    return APPOINTMENT_LENGTH;
+  }
+
+  return Infinity;
+}
+```
+
+I'll label this one `NEWER watTime` so we can see the difference:
+
+```log
+[8.84ms] split
+[0.23ms] push
+[9.10ms] combine names
+[65.12ms] sort
+[5.58ms] index of
+[0.00ms] NEWER waitTime
+[0.00ms] NEW waitTime
+[0.08ms] NEW getWaitTime
+[79.92ms] court
+[100.23ms] runtime
+```
+
+Hard to tell with our `console.time()` metrics, let's run a benchmark:
+
+```log
+Gathering performance data...
+
+Running old implementation...
+[8.75ms] split
+[0.23ms] push
+[9.01ms] combine names
+[63.78ms] sort
+[4.02ms] index of
+[0.00ms] NEW waitTime
+[0.07ms] NEW getWaitTime
+[76.90ms] court
+[97.37ms] runtime
+
+-[PERFORMANCE]-------------------
+
+    Mean: 77.01633ms
+    Median: 77.01633ms
+    Mode: 77.01633ms
+
+-[Configuration]-----------------
+
+    1 iterations
+    Average participants: 500000
+    Average judges: 6
+
+---------------------------------
+
+Running new implementation...
+[8.89ms] split
+[0.14ms] push
+[9.03ms] combine names
+[55.25ms] sort
+[2.35ms] index of
+[0.01ms] NEWER waitTime
+[66.65ms] NEW court
+
+-[PERFORMANCE]-------------------
+
+    Mean: 71.86713ms
+    Median: 77.01633ms
+    Mode: 66.71792ms
+
+-[Configuration]-----------------
+
+    1 iterations
+    Average participants: 500000
+    Average judges: 6
+
+---------------------------------
+
+-[SUMMARY]-----------------------
+
+    Old implementation: 77.01633ms
+    New implementation: 71.86713ms
+
+    New implementation is faster
+    by 5.14920ms on average
+
+---------------------------------
+```
+
+It looks like it might be a little faster, but it isn't a huge change. Let's up those iterations and add back in some randomization to the number of names in the queue and the number of judgesand see what happens.
+
+```log
+Gathering performance data...
+
+Running old implementation...
+
+-[PERFORMANCE]-------------------
+
+    Mean: 40.27686ms
+    Median: 39.58979ms
+    Mode: 11.9805ms
+
+-[Configuration]-----------------
+
+    1000 iterations
+    Average participants: 301643
+    Average judges: 6
+
+---------------------------------
+
+Running new implementation...
+
+-[PERFORMANCE]-------------------
+
+    Mean: 39.98556ms
+    Median: 39.24696ms
+    Mode: 18.25363ms
+
+-[Configuration]-----------------
+
+    1000 iterations
+    Average participants: 299494
+    Average judges: 6
+
+---------------------------------
+
+-[SUMMARY]-----------------------
+
+    Old implementation: 40.27686ms
+    New implementation: 39.98556ms
+
+    New implementation is faster
+    by 0.29130ms on average
+
+---------------------------------
+```
+
+It's not much, but let's keep it for now.
+
+#### Step two
+
+Okay, let's tackle what seems to be the actual bottleneck:
+
+```log
+...
+[39.57ms] sort
+...
+[43.05ms] sort
+...
+[36.57ms] sort
+...
+[65.12ms] sort
+...
+[63.78ms] sort
+...
+[55.25ms] sort
+```
+
+Over and over again, our sort takes orders of magnitude longer than the rest of our code. There are lots of different sorting algorithms out there. In general, the `Array.prototype.sort()` method is pretty good, but there are cases where the underlying engine developers have optimized for the most common use cases and sorting a big array of strings might just be in someone's backlog.
+
+> The time and space complexity of the sort cannot be guaranteed as it depends on the implementation.
+>
+> - [`MDN Array.prototype.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
+
+To help understand what's causing our bottleneck we're going to take a few different approaches to tweak our sorting.
+
+##### Sorting Methods
+
+Sorting in JavaScript is an area of [some complexity](https://www.gregorygaines.com/blog/the-only-javascript-sorting-guide-youll-ever-need/)and a lot of [opinions](https://stackoverflow.com/a/26295229/656011). It's also fraught with outdated information that no longer applies to the current browser/runtime environments we're using today.
+
+So, what we're going to have to do is test a bunch of these approaches. Now, because this is a simple exercise and the spririt of the challenge was to not use external tools, I won't be pulling in any 3rd party sorting libraries, and because I don't think it's a valuable use of my time, I won't be recreating any of the other sorts here either.
+
+We're only going to use the sorting methods that JavaScript gives us.
+
+I wired up another performance benchmark that lets us test different ways of sorting an Array:
+
+- [`Array.prototype.sort()`](): Just the native sort with a split string on spaces (`" "`)
+- `Array.prototype.sort()` w/ `String.prototype.toLowerCase()`: Just like `Array.prototype.sort()`, except we use `String.prototype.toLowerCase()` on the string first to see if normalizing the strings gives us a performance boost
+- [`Array.prototype.toSorted()`](): Instead of sorting the array in place, let's use the `Array.prototype.toSorted()` method to store the sorted array in a new variable
+- [`String.prototype.localeCompare()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare): an older, locale-aware natural sort for Strings in JavaScript
+- [`IntlCollator.prototype.compare()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/compare): the modern locale-aware natural sort for Strings in JavaScript
+- [`Array.prototype.sort(compareFn`)](https://stackoverflow.com/a/40355107/656011): a compare function that many different versions of showed up across all of the various discussions about sorting strings in JavaScript
+
+```log
+-[PERFORMANCE]-------------------
+
+    sort(): 23.28121ms
+    toLowerCase(): 23.33817ms
+    toSorted(): 24.52657ms
+    localeCompare(): 58.67902ms
+    compareFn: 67.54217ms
+    collator.compare(): 98.18516ms
+
+-[Configuration]-------------------
+
+    1000 iterations
+
+---------------------------------
+```
+
+So, it looks like the way that the engine optimizes `Array.prototype.sort()` is the fastest approach for us without pulling in a 3rd party library or writing our own implemetation of another, more complicated sorting algorithm.
+
+Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now.
+
+### Conclusion
+
+Running the `perf.test.ts` which uses a random string of between `1,000,000` and `2,000,000` space separated names executes in ~1.25 seconds on average, and I think that's good enough for now.
