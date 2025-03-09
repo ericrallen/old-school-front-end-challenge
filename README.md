@@ -17,17 +17,15 @@ I decided to take things a few steps further to provide a better user experience
   - **Note**: Horizontal scrolling is usually best avoided, but the expand/collapse effect with variable length items like a recipe make the UI jump around too much as cards are collapsed/expanded. The jumping and reflowing UI when using vertical scrolling and expanding/collapsing items could probably be resolved with a Masonry-type layout, but that didn't feel like the right choice for the user given the example was to use a recipe and you generally want to be able to focus on a recipe.
 - Highligher effect on important bits - using an inline `<code>` block and CSS linear-gradient to apply a highlighter effect for key details
 - Checked items receive a strikethrough, and a marker-like crossing off the list effect, to help the user keep track of where they're at in the recipe or ingredients list
-- Dynamic reset button for a recipe to uncheck any checked ingredients or steps
+- Dynamic reset button for a recipe to uncheck any checked ingredients or steps (Firefox likes to save the state of these checkboxes, so it's a nice way to start a recipe over)
 - Animated expand/collapse
 - Show More/Less toggle only visible\* when container has enough content to expand
   - \* _The trick that this uses relies on scroll animations, which are only supported in Blink right now, so Firefox and Safari will still see the toggle on small items until support for scroll animations is implemented in those browser's engines._
 - Includes the Recipe structured data schema
 - Accessibility:
   - full keyboard navigation support
-  - full screen reader support
+  - screen reader support
   - support for `prefers-reduced-motion` system preference
-  - support for `prefers-color-scheme: dark` system preference
-    - **Note**: There are some hacks that allow you to implement a dark/light mode toggle button (technically a checkbox like the show/hide functionality we're using to expand our cards), but that seemed out of the scope of this particular challenge.
   - Fluid layout when resizing text with browser zoom controls
 - Native HTML `popover`s for extra notes about a recipe
 

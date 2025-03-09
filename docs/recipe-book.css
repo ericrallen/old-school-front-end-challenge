@@ -23,24 +23,8 @@
   --color-link: #0000ee;
 
   /* we're going to use this to style some marker-like effects */
-  --highlight: rgb(236, 203, 52);
-  --cross-out: rgb(22, 22, 52);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 23, 23, 23;
-    --foreground: 247, 247, 247;
-
-    --color-background: #232323;
-    --color-foreground: #f7f7f7;
-    --color-border: #ccc;
-
-    --color-link: #43afe9;
-
-    --highlight: 165, 234, 142;
-    --cross-out: 213, 213, 235;
-  }
+  --highlight: 236, 203, 52;
+  --cross-out: 22, 22, 52;
 }
 
 body {
@@ -179,7 +163,7 @@ ul:not(.util--bullets) {
   display: inline-block;
   width: 100%;
   height: fit-content;
-  padding: 1rem;
+  padding: 1rem 1rem 4rem;
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -211,6 +195,10 @@ ul:not(.util--bullets) {
   margin-bottom: 2.25rem;
 }
 
+.recipe:only-child {
+  margin-bottom: 0;
+}
+
 .recipe__header {
   margin-bottom: 1rem;
 }
@@ -236,6 +224,11 @@ ul:not(.util--bullets) {
 .recipe__form {
   position: relative;
   margin-bottom: 50px;
+}
+
+.recipe-list__item--demo .recipe__form,
+.recipe-list__item--demo .recipe__items {
+  margin-bottom: 0;
 }
 
 .recipe__form__header {
@@ -396,15 +389,13 @@ ul:not(.util--bullets) {
   height: 1.5rem;
   background: linear-gradient(
     to bottom,
-    rgba(var(--background), 0) 0%,
-    rgba(var(--background), 0.2) 60%,
-    rgba(var(--background), 0.4) 85%,
-    rgba(var(--background), 0.6) 100%
+    rgba(247, 247, 247, 0.3) 0%,
+    rgba(247, 247, 247, 0.5) 60%,
+    rgba(247, 247, 247, 0.65) 85%,
+    rgba(247, 247, 247, 1) 100%
   );
 
   pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.3s ease;
 }
 
 .recipe__footer__reset {
@@ -455,7 +446,7 @@ ul:not(.util--bullets) {
 }
 
 .recipe-list__item:has(.recipe__footer__toggle:checked) {
-  max-height: 40vh;
+  max-height: 23rem;
   transition-timing-function: ease, ease-out;
 }
 
@@ -509,6 +500,34 @@ ul:not(.util--bullets) {
   .recipe-list__item:has(.recipe__items) .recipe__footer__toggle__label__span {
     display: inline-block;
   }
+}
+
+/*
+  HACK: This is a hack to show the demo recipe at the fixed height of
+  10 items that the original challenge asked for.
+*/
+.recipe-list__item--demo:has(
+    .recipe__items_list > li:nth-child(-n + 10):nth-last-child(1)
+  ) {
+  max-height: 23rem;
+}
+
+.recipe-list__item--demo:has(
+    .recipe__items_list > li:nth-child(-n + 10):nth-last-child(1)
+  )
+  .recipe__footer__toggle,
+.recipe-list__item--demo:has(
+    .recipe__items_list > li:nth-child(-n + 10):nth-last-child(1)
+  )
+  .recipe__footer__toggle
+  + label {
+  display: none;
+}
+
+.recipe-list__item--demo:has(
+    .recipe__items_list > li:nth-child(-n + 10):nth-last-child(1)
+  ) {
+  height: auto;
 }
 
 /* Borrowed from: https://css-tricks.com/nuking-motion-with-prefers-reduced-motion/ */
