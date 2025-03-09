@@ -342,10 +342,10 @@ Now, let's look at some other things we could do to the `court()` function to `M
 One thing I noticed after looking at the code more thoroughly is that we're providing an early escape hatch for the edge cases, to keep the Cyclomatic Complexity of our function low, but I wonder if we should optimize for the most likely conditions rather than edge cases?
 
 ```ts
-function newCourt(name = "", judges = 0, waitingList = ""): number {
+function court(name = "", judges = 0, waitingList = ""): number {
   if (judges > 0) {
     if (waitingList.length > 0) {
-      const waitingNames = [name, ...waitingList.split(" ")];
+      const waitingNames = waitingList.split(" ");
 
       waitingNames.push(name);
 
@@ -651,13 +651,9 @@ I wired up another performance benchmark that lets us test different ways of sor
 
 So, it looks like the way that the engine optimizes `Array.prototype.sort()` is the fastest approach for us without pulling in a 3rd party library or writing our own implemetation of another, more complicated sorting algorithm.
 
-**Note**: You can also see how different the results are for a bunch of different algorithms depending on your browser:
+**Note**: You can also see how different the results are for a bunch of different algorithms depending on your browser. [Here's one from my browser](https://www.measurethat.net/Benchmarks/ShowResult/591284), but you can look at the [other results](https://www.measurethat.net/Benchmarks/ListResults/3549) showing differences in Chrome - I think there's even one Edge in there, too.
 
-<iframe src="https://measurethat.net/Embed?id=591284" width="100%" height="500px"></iframe>
-
-[Here's one from my browser](https://www.measurethat.net/Benchmarks/ShowResult/591284), but you can look at the [other results](https://www.measurethat.net/Benchmarks/ListResults/3549) showing differences in Chrome.
-
-Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now. If things truly ended up at a bottleneck, we could investigate some strategies like:
+Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now. If things truly ended up at an actual perceivable bottleneck for users, we could investigate some strategies like:
 
 - converting the strings to a numeric representation and using `TypedArray`s for sorting at a lower level
 - chunking the data, sorting the chunks, and then merging the sorted chunks
