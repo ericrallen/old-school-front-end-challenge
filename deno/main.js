@@ -1,11 +1,5 @@
 export const APPOINTMENT_LENGTH = 30;
 
-export function getWaitTime(nameIndex = 0, judges = 1) {
-  return nameIndex < judges
-    ? APPOINTMENT_LENGTH
-    : (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
-}
-
 export function court(name = "", judges = 0, waitingList = "") {
   // there are some escape hatches for edge cases where we
   // won't need to compute anything
@@ -28,7 +22,9 @@ export function court(name = "", judges = 0, waitingList = "") {
 
   const nameIndex = waitingNames.indexOf(name);
 
-  const waitTime = getWaitTime(nameIndex, judges);
+  if (nameIndex < judges) {
+    return APPOINTMENT_LENGTH;
+  }
 
-  return waitTime;
+  return Math.floor(nameIndex / judges) + 1 * APPOINTMENT_LENGTH;
 }

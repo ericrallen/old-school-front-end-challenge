@@ -4,7 +4,7 @@ This repo contains some demos created for a challenge.
 
 ## No JavaScript Challenge
 
-The first part of the challenge was to render a specific UI design (variable length cards that have a show/hide) without any JavaScript.
+The first part of the challenge was to render a specific UI design, variable length cards that have a show/hide toggle, without any JavaScript.
 
 ### My Approach
 
@@ -14,7 +14,7 @@ I decided to take things a few steps further to provide a better user experience
   - **Small Screens**: single columnn with vertical scroll
   - **Medium Screens**: single row with horizontal scroll and 1/2 screen width items
   - **Large Screens**: single row with horizontal scroll and 1/3 screen width items
-  - **Note**: Horizontal scrolling is usually best avoided, but the expand/collapse effect with variable length items like a recipe make the UI jump around too much as cards are collapsed/expanded. The jumping and reflowing UI when using vertical scrolling and expanding/collapsing items could probably be resolved with a Masonry-type layout, but that didn't feel like the right choice for the user given the example was to use a recipe and you generally want to be able to focus on a recipe.
+  - **Note**: Horizontal scrolling is usually best avoided, but the expand/collapse effect with variable length items like a recipe can lead to the UI jumping around too much as cards are collapsed/expanded. That jumping and reflowing UI could probably be resolved with a Masonry-like layout, but that didn't feel like the right choice for the user experience given the example was to use a recipe and you generally want to be able to focus on a recipe.
 - Highligher effect on important bits - using an inline `<code>` block and CSS linear-gradient to apply a highlighter effect for key details
 - Checked items receive a strikethrough, and a marker-like crossing off the list effect, to help the user keep track of where they're at in the recipe or ingredients list
 - Dynamic reset button for a recipe to uncheck any checked ingredients or steps (Firefox likes to save the state of these checkboxes, so it's a nice way to start a recipe over)
@@ -33,11 +33,11 @@ I decided to take things a few steps further to provide a better user experience
 
 The second part of the challenge was to calculate the time it would take for a person to be seen for a court appointment when there are a limited number of judges available and all of the waiting attendees are in some ordered queue (in this case alphabetically by name).
 
-The goal was to write the fasted JavaScript function you could come up with to solve this problem.
+The goal was to write the fastest JavaScript function you could come up with to solve this problem.
 
 ### My Approach
 
-I'm a firm believer in the `Make it work. Make it right. Make it fast.` approach to iterative software development, so that's how I approached this.
+I'm a firm believer in the [`Make it work. Make it right. Make it fast.`](https://wiki.c2.com/?MakeItWorkMakeItRightMakeItFast) approach to iterative software development, so that's how I approached this.
 
 ### Make it work
 
@@ -49,7 +49,7 @@ In order to make this work, I broke it down into it's constituent parts:
 4. Once we know which group the user is in, we can calculate the time it will take for them to be seen
 5. The total elapsed time until they are done is that time to be seen plus the time an appointment takes
 
-I knew there was an algorithmic way to solve this, but that's more of a `Make it right.` or `Make it fast.` situation, so I started with a brute force solution:
+I knew there was most likley an algorithmic way to solve this, but that's more of a `Make it right.` or `Make it fast.` situation, so I started with a brute force solution:
 
 ```ts
 export const APPOINTMENT_LENGTH = 30;
@@ -89,13 +89,11 @@ export function getWaitTime(judges = 0, nameIndex = 0) {
 export function court(name = "", judges = 0, waitingList = "") {
   // If there are no judges, the wait is infinite
   if (judges < 1) {
-    console.timeEnd("court");
     return Infinity;
   }
 
   // If we are the only person in line, we'll be seen immediately
   if (waitingList.length === 0) {
-    console.timeEnd("court");
     return APPOINTMENT_LENGTH;
   }
 
@@ -118,8 +116,8 @@ export function court(name = "", judges = 0, waitingList = "") {
 In testing this, I learned a few things that will inform the `Make it right.` and `Make it fast.` stages:
 
 1. In order to test this and verify that your approach works for arbitrary configurations of judges and names, you have to solve it algorithmically
-2. As is the case with a lot of programming, for small numbers of people, this is already pretty fast, but this is a situation where we specifically want to push performance, so we're going to dig deeper and do better
-3. I was using `bun` by default and wondered what things would look like in `Node` and `Deno`
+2. As is the case with a lot of programming, for small numbers of people, this is already pretty fast, but this is a situation where we specifically want to push performance, so we're going to want to test with numbers that are greater by orders of magnitude than the examples
+3. I was using `Bun`, but things might look like in `Node`, `Deno`, and different browser engines
 
 #### Performance
 
@@ -127,9 +125,9 @@ Now that we had a basic function and could validate that it worked, it was time 
 
 ##### Step one
 
-I created a new version of the file with `console.time()` and `console.timeEnd()` calls around each logical operation to see where it would be worth investing time.
+I wrapped each logical operation with [`console.time()`](https://developer.mozilla.org/en-US/docs/Web/API/console/time_static) and [`console.timeEnd()`](https://developer.mozilla.org/en-US/docs/Web/API/console/timeEnd_static) calls to see where it would be worth investing time improving performance.
 
-It looked generally like this, which wasn't super helpful:
+The output wasn't really granular enough to be that helpful:
 
 ```log
 [0.00ms] split
@@ -143,13 +141,13 @@ It looked generally like this, which wasn't super helpful:
 [0.02ms] court
 ```
 
-**Note**: I wrapped calls to the built-in prototype functions like `String.prototype.split()`, `Array.prototype.push()`, and `Array.prototype.sort()` just in case there were any outliers where we'd need to do something clever. In general, the likelihood of one of them being the bottlenock instead of our own code is low, but there are situations where you might need to adapt something to optimize your specific use case. Also, the engine will sometimes optimize things under the hood in ways that you don't anticipate, so we don't want to assume someting will or won't be performant without measuring it.
+**Note**: I wrapped calls to the built-in prototype functions like `String.prototype.split()`, `Array.prototype.push()`, and `Array.prototype.sort()` just in case there were any outliers where we'd need to do something clever. In general, the likelihood of one of them being the bottlenock instead of our own code is low, but there are situations where you might need to adapt something to optimize your specific use case. Also, the engine will sometimes optimize things under the hood in ways that you don't anticipate, so we don't want to assume someting will or won't be performant without measuring it first. Measure twice. Optimize once.
 
 ##### Step two
 
-Let's try a different approach using `performance.mark()` and `performance.measure()`. We don't want to prematurely optimize, so let's start with just looking at the overall function.
+Let's try a different approach using [`performance.mark()`](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) and [`performance.measure()`](https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure). We don't want to prematurely optimize, so let's start with just looking at the overall function.
 
-I added a script that wraps our function in `performance.mark()` calls, calls the function a bunch of times, and then returns the average response time:
+I added a script that wraps our function in `performance.mark()` calls, calls the function a configurable number of times, and then returns the average execution time:
 
 ```log
 -[PERFORMANCE]-------------------
@@ -169,7 +167,7 @@ I added a script that wraps our function in `performance.mark()` calls, calls th
 
 That's okay, but those are rookie numbers. We need to increase that participant count to really see what's going on.
 
-With a minimum of `1000` participants, we can see things are taking a bit longer:
+With a minimum of `1000` participants, we can see the numbers start to go up:
 
 ```log
 -[PERFORMANCE]-------------------
@@ -187,7 +185,7 @@ With a minimum of `1000` participants, we can see things are taking a bit longer
 ---------------------------------
 ```
 
-Let's dig deeper. What about if we use a list of people waiting that's somewhere between `100,000` and `500,000`?
+Let's dig deeper. What about if we use a random number of people between `100,000` and `500,000` for each iteration?
 
 ```log
 -[PERFORMANCE]-------------------
@@ -205,13 +203,13 @@ Let's dig deeper. What about if we use a list of people waiting that's somewhere
 ---------------------------------
 ```
 
-Okay, so our time to execute is growing quite a bit with the number of names we're dealing with in the queue.
+Okay, so our time to execute is growing quite a bit with the number of names we're dealing with in the queue. Things are still reasonably fast, but there's almost always room to try to improve our numbers.
 
 I think we have enough information to move on to the `Make it right` part of our iterative cycle.
 
 ### Make it right
 
-Now that we know there's some code that could be faster, let's try to see if we can get some useful info from the `console.time()` and `console.timeEnd()` methods we tried to use earlier. By combining our performance monitoring scripts, we can get the output for each stage of the process:
+Now that we know there's some code that could be faster, let's try to see if we can get some useful info from the `console.time()` and `console.timeEnd()` methods we tried to use earlier. By combining our performance monitoring scripts, and sticking with lists of hundreds of thousands of names, we can see some actual values for each stage of the process:
 
 ```log
 [6.99ms] split
@@ -240,15 +238,15 @@ Now that we know there's some code that could be faster, let's try to see if we 
 ---------------------------------
 ```
 
-Interestingly, it looks like the `sort` is taking the most time - we're sorting between `100,000` and `500,000` items per iteration, so that makes sense - but there are some other spots we can try to optimize, too. Let's save the sorting for `Make it fast.`.
+It looks like the `sort` is taking the most time - we're sorting between `100,000` and `500,000` items per iteration, so that makes sense - but there are some other spots we can try to optimize, too. We're using the built-in `.sort()` method, so let's save the sorting for `Make it fast`.
 
-Remember, we're still in the `Make it Right.` stage.
+Anything we do to improve the native sorting likely doesn't fall into the best practices and maintainability focused `Make it right` stage.
 
 #### Step one
 
-The first thing I want to do is fix the way we're calculating the wait time. In the previuos code, we were iterating with a `for()` loop and then using a `while()` loop inside of that to segment our list of names with appointments into groups and increment the wait time per group.
+The first thing I want to do is fix the way we're calculating the wait time. In the previuos code, we were iterating with a `for()` loop and then using a `while()` loop inside of that to segment our list of names with appointments into groups and increment the wait time per group. Nested loops are bad.
 
-While writing some tests to validate my calcuations, I ended up finding a more efficient way to solve for the wait time:
+While writing some tests to validate my calcuations, I came up with a more efficient way to solve for the wait time:
 
 ```math
 \text{WaitTime}(p, j) = (\lfloor \frac{p}{j} \rfloor + 1) \cdot A
@@ -260,6 +258,8 @@ While writing some tests to validate my calcuations, I ended up finding a more e
 - `j` is the number of judges available for appointments
 - `A` is the duration of an appointment
 
+**Note**: The `+1` is to account for the length of the appointment itself.
+
 In our codebase, it looks like this:
 
 ```ts
@@ -268,13 +268,11 @@ In our codebase, it looks like this:
 function getWaitTime(nameIndex = 0, judges = 1) {
   // We'll check to see if the user will be in the first group
   // before we do any math
-  return nameIndex < judges
-    ? APPOINTMENT_LENGTH
-    : (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
+  return nameIndex < judges ? APPOINTMENT_LENGTH : (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
 }
 ```
 
-Now, let's update our implementation and run both of the `getWaitTime()` implementations to compare how they are impacting our results:
+Now, let's update our implementation, but we'll want to run both the old and new `getWaitTime()` implementations so we can compare how they are impacting our results:
 
 ```log
 [7.03ms] split
@@ -305,7 +303,9 @@ Now, let's update our implementation and run both of the `getWaitTime()` impleme
 ---------------------------------
 ```
 
-It looks like our new wait time calculation is a bit better, too. So let's swich over to that one and remove the old logic from our benchmarking:
+**Note**: The `waitTime` performance timer wraps the execution of the code inside of the `getWaitTime` function and the `getWaitTime` performance timer wraps the call to the `getWaitTime()` funcion in our `court()` function.
+
+It looks like our new wait time calculation is significantly faster. So let's swich over to that one and remove the old logic from our benchmarking:
 
 ```log
 [6.19ms] split
@@ -333,13 +333,13 @@ It looks like our new wait time calculation is a bit better, too. So let's swich
 ---------------------------------
 ```
 
-**Note**: I'll leave the `NEW` label in there so it's easy to tell which things we've tweaked as we keep going.
+**Note**: I'll leave the `NEW` label in there so it's easy to tell which things we've tweaked as we iterate.
 
 #### Step two
 
 Now, let's look at some other things we could do to the `court()` function to `Make it right.`.
 
-One thing I noticed after looking at the code more thoroughly is that we're providing an early escape hatch for the edge cases, to keep the Cyclomatic Complexity of our function low, but I wonder if we should optimize for the most likely conditions rather than edge cases?
+One thing I noticed after looking at the code more thoroughly is that we're providing an early escape hatch for the edge cases, to keep the [Cyclomatic Complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity) of our function low, but I wonder if we should optimize for the most likely conditions rather than edge cases?
 
 ```ts
 function court(name = "", judges = 0, waitingList = ""): number {
@@ -366,7 +366,7 @@ function court(name = "", judges = 0, waitingList = ""): number {
 
 This represents a new execution path for our code, so we'll need to update our benchmark script to run both implementations and let us compare them:
 
-```logs
+```log
 Gathering performance data...
 
 Running old implementation...
@@ -414,24 +414,22 @@ Running new implementation...
 
 I ran this quite a few times with `500,000` participants, 6 judges, and `1,000` iterations, and it was pretty close every time, but it looks like our previous early escape hatch approach might be just a little faster?
 
-For illustrative purposes, we'll revisit this idea later when we test Node, Deno, and the browser. Things like this can be runtime-dependent, we may need to optimize for a known environment where we expect the code to execute or focus on more general performance across disparate runtime environments.
+Things like this can sometimes be environment-dependent, and the underlying engine might optimize differently between Node and the browser, or Bun and Deno. If we were trying to squeeze out every millisecond from this, we may need to optimize for a known environment where we expect the code to execute and accept performance tradeoffs in other runtimes, or we might decide to focus on more general performance across the disparate runtime environments. It really depends on the context of what we're building, if/how we're distributing it, and where we expect it to live.
 
-So let's revert that change for now.
+So let's revert this change for now.
 
 Everything else is about as good as it could be for this simple of a function.
 
 ### Make it fast(er)
 
-Let's dig into the reason you're all here: the `Make it fast.` part of our process.
-
-There can be significant differences in how certain built-ins function across engines, so JavaScript performance isn't always a science - sometimes it's an art.
+There can be significant differences in how certain built-in methods function across engines, so JavaScript performance isn't always a science - sometimes it's more of an art.
 
 #### Step one
 
-Our `getWaitTime()` method is pretty small, I wonder if we gain any performance benefit by removing the call to the function and just putting everythign into one function?
+Our `getWaitTime()` method is pretty small, I wonder if we gain any performance by removing the call to the second function and moving all of the logic into the `court()` function?
 
 ```ts
-export function newCourt(name = "", judges = 0, waitingList = "") {
+export function court(name = "", judges = 0, waitingList = "") {
   if (judges > 0) {
     if (waitingList.length > 0) {
       const waitingNames = waitingList.split(" ");
@@ -446,8 +444,7 @@ export function newCourt(name = "", judges = 0, waitingList = "") {
         return APPOINTMENT_LENGTH;
       }
 
-      const waitTime =
-        (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
+      const waitTime = (Math.floor(nameIndex / judges) + 1) * APPOINTMENT_LENGTH;
 
       return waitTime;
     }
@@ -538,7 +535,7 @@ Running new implementation...
 ---------------------------------
 ```
 
-It looks like it might be a little faster, but it isn't a huge change. Let's up those iterations and add back in some randomization to the number of names in the queue and the number of judgesand see what happens.
+It looks like it might be a little faster, but it isn't a huge change. Let's up those iterations and add back in some randomization to the number of names in the queue and the number of judges to reflect more real-world scenarios:
 
 ```log
 Gathering performance data...
@@ -586,11 +583,11 @@ Running new implementation...
 ---------------------------------
 ```
 
-It's not much, but let's keep it for now.
+It's not much on average, but let's keep it for now.
 
 #### Step two
 
-Okay, let's tackle what seems to be the actual bottleneck:
+Okay, let's tackle what seems to be eating up the most execution time:
 
 ```log
 ...
@@ -607,21 +604,29 @@ Okay, let's tackle what seems to be the actual bottleneck:
 [55.25ms] sort
 ```
 
-Over and over again, our sort takes orders of magnitude longer than the rest of our code. There are lots of different sorting algorithms out there. In general, the `Array.prototype.sort()` method is pretty good, but there are cases where the underlying engine developers have optimized for the most common use cases and sorting a big array of strings might just be in someone's backlog.
+Over and over again, our sort takes orders of magnitude longer than the rest of our code.
 
 > The time and space complexity of the sort cannot be guaranteed as it depends on the implementation.
 >
 > - [`MDN Array.prototype.sort()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
 
+There are lots of different sorting algorithms out there. In general, the `Array.prototype.sort()` method is pretty good, [especially in Node's V8 engine](https://v8.dev/blog/array-sort), but there are cases where the underlying engine developers have optimized for the most common scenarios and what we're sorting might not fall into those execution paths.
+
+> Sorting in JavaScript is hard.
+>
+> - [Simon Zünd - V8 Dev Blog](https://v8.dev/blog/array-sort)
+
 To help understand what's causing our bottleneck we're going to take a few different approaches to tweak our sorting.
 
 ##### Sorting Methods
 
-Sorting in JavaScript is an area of [some complexity](https://www.gregorygaines.com/blog/the-only-javascript-sorting-guide-youll-ever-need/)and a lot of [opinions](https://stackoverflow.com/a/26295229/656011). It's also fraught with outdated information that no longer applies to the current browser/runtime environments we're using today.
+Sorting in JavaScript is an area of [some complexity](https://www.gregorygaines.com/blog/the-only-javascript-sorting-guide-youll-ever-need/)and a lot of [opinions](https://stackoverflow.com/a/26295229/656011). It's also fraught with outdated information that no longer applies to the current browser/runtime environments we're using today and the hard work that engine maintainers have put into improving performance.
 
-So, what we're going to have to do is test a bunch of these approaches. Now, because this is a simple exercise and the spririt of the challenge was to not use external tools, I won't be pulling in any 3rd party sorting libraries, and because I don't think it's a valuable use of my time, I won't be recreating any of the other sorts here either.
+So, we should probably test a bunch of these approaches.
 
-We're only going to use the sorting methods that JavaScript gives us.
+Because this is a simple exercise and the spririt of the challenge was to not use external tools, I won't be pulling in any 3rd party sorting libraries, and because I don't think it's a valuable use of my time, I won't be reproducing any of the other sorting algorithms here either.
+
+We're only going to use the sorting methods that JavaScript provides.
 
 I wired up another performance benchmark that lets us test different ways of sorting an Array:
 
@@ -651,18 +656,25 @@ I wired up another performance benchmark that lets us test different ways of sor
 
 So, it looks like the way that the engine optimizes `Array.prototype.sort()` is the fastest approach for us without pulling in a 3rd party library or writing our own implemetation of another, more complicated sorting algorithm.
 
-**Note**: You can also see how different the results are for a bunch of different algorithms depending on your browser. [Here's one from my browser](https://www.measurethat.net/Benchmarks/ShowResult/591284), but you can look at the [other results](https://www.measurethat.net/Benchmarks/ListResults/3549) showing differences in Chrome - I think there's even one Edge in there, too.
+**Note**: You can also see how different the results are for a bunch of different algorithms depending on your browser. [Here's one from my browser](https://www.measurethat.net/Benchmarks/ShowResult/591284), but you can look at the [other results](https://www.measurethat.net/Benchmarks/ListResults/3549) showing differences. It's mostly in Chrome - but I think there's one Edge in there and a handful of Firefox and Safari profiles.
 
-Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just have to leave it here for now. If things truly ended up at an actual perceivable bottleneck for users, we could investigate some strategies like:
+Integrating a different sorting algorithm seems out of scope for this challenge, so we'll just leave it here for now.
+
+If things truly ended up at an actual perceivable bottleneck for users, we could investigate some strategies like:
 
 - converting the strings to a numeric representation and using `TypedArray`s for sorting at a lower level
+  - Converting the first 2-4 characters to bytes and storing them in something like a [`Uint32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array) would allow us to leverage the much faster sorting of numerical values, but we might negate any performance improvement by adding too much overhead from converting the strings; there could be some issues with similar names not getting sorted perfectly, too, but there are tradeoffs to every approach
 - chunking the data, sorting the chunks, and then merging the sorted chunks
-  - We could also investigate parallelizing the chunks with Workers
+  - We could also investigate parallelizing the chunk sorting with [Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
 - implementing a more robust sorting algorithm
-  - This will likely have impacts in various runtimes, so it would depend on the expect encironment and usecase
-- Counting duplicates and converting the `Array` to a `Set` to remove duplicates before sorting and then using the duplicate count to inject
+  - This will likely have impacts in various runtimes, so it would depend on the expect environment and usecase
+  - There are 3rd party libraries like [`fast-sort`](https://www.npmjs.com/package/fast-sort) could be worth investigating
+- Counting duplicates and converting the `Array` to a `Set` to remove duplicates before sorting and then using the duplicate count to calculate the offset for the index of the user's name in the sorted Array could save some time during the sort if there are repeated names, but might introduce more complexity and overhead
+- We could also explore things like testing `if/else` statements vs ternary operators, but differnet engines might optimize these code paths differently, so the results may be inconclusive, but we could see an environment-specific increase
 
 ### Conclusion
+
+There are still many ways we could approach optimizing this, but without more detailed analysis of the runtime we're expecting the code to execute in most often, and real world data on measurable user impact or server costs any further optimization is probably premature and could prevent us from benefiting from future engine improvements and optimizations.
 
 | Runtime | Mean     | Median   | Mode\*  | Iterations | Avg. Items |
 | ------- | -------- | -------- | ------- | ---------- | ---------- |
@@ -670,8 +682,6 @@ Integrating a different sorting algorithm seems out of scope for this challenge,
 | Node    | 38.640ms | 36.899ms | 26.74ms | 1000       | 302644     |
 | Deno    | 35.168ms | 34.359ms | 11.31ms | 1000       | 299598     |
 
-_\* These tests rarely had a frequently repeated value, so the mode might only represent a handful of values ._
+_\* These tests rarely had a frequently repeated value, so the mode only represents a handful of repeated values after rounding to 2 decimals of precision._
 
-You can see the browser verion at [ericrallen.github.io/old-school-front-end-challenge/how-long.html](https://ericrallen.github.io/old-school-front-end-challenge/how-long.html). With 1,000,000 participants it executes in ~130-160ms and with 10,000 participants it has nearly sub-submillisecond response time.
-
-I think that's enough for me to feel satisfied with this exercise.
+You can see the browser version at [ericrallen.github.io/old-school-front-end-challenge/how-long.html](https://ericrallen.github.io/old-school-front-end-challenge/how-long.html) and test it in your preferred browser. With 1,000,000 participants it executes in ~130-160ms and with 10,000 participants it has nearly sub-submillisecond response time.
